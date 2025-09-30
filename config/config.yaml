@@ -1,0 +1,43 @@
+config_name: "gene_correlation_production"
+config_version: "1.0.0"
+environment: "prod"
+
+database:
+  host: "your-db-host"
+  port: 5432
+  database: "bioinformatics_prod"
+  username: "etl_user"
+  password: "${DB_PASSWORD}"  # Use environment variable
+  pool_size: 10
+  max_overflow: 20
+
+gene_filter:
+  method: "variance"
+  top_n_genes: 3000
+  min_variance_threshold: 0.01
+  min_expression_value: 0.0
+
+statistical:
+  correlation_method: "spearman"
+  min_samples: 20
+  alpha_fdr: 0.05
+
+processing:
+  batch_size: 1000
+  block_size: 100
+  max_workers: 4
+  memory_limit_gb: 8.0
+  checkpoint_interval: 10000
+
+logging:
+  level: "INFO"
+  format: "json"
+  file_path: "/var/log/gene_etl/etl.log"
+  max_file_size_mb: 100
+  backup_count: 5
+
+alerting:
+  enabled: true
+  email_recipients: ["bioinfo-team@company.com"]
+  smtp_server: "smtp.company.com"
+  smtp_port: 587
